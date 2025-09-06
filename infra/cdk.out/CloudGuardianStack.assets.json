@@ -1,0 +1,51 @@
+{
+  "version": "48.0.0",
+  "files": {
+    "34d807f5962ee440c08af07105fa6ea22374bb4bb12b45261cfe23705a8b5c0e": {
+      "displayName": "BackfillCoordinator/Code",
+      "source": {
+        "path": "D:\\cdk-hello",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "135808934664-us-east-1-ef40cffd": {
+          "bucketName": "cdk-hnb659fds-assets-135808934664-us-east-1",
+          "objectKey": "34d807f5962ee440c08af07105fa6ea22374bb4bb12b45261cfe23705a8b5c0e.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-file-publishing-role-135808934664-us-east-1"
+        }
+      }
+    },
+    "9d8a1560596a57227cc64c0450ad13720b29ef137d29e5dafbd27b0c603f15fd": {
+      "displayName": "LanguageFetcher/Code",
+      "source": {
+        "path": "D:\\cdk-hello",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "135808934664-us-east-1-34f5701b": {
+          "bucketName": "cdk-hnb659fds-assets-135808934664-us-east-1",
+          "objectKey": "9d8a1560596a57227cc64c0450ad13720b29ef137d29e5dafbd27b0c603f15fd.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-file-publishing-role-135808934664-us-east-1"
+        }
+      }
+    },
+    "25de300acef038deb512028a35112bc93b6f13cab3fef155bed5ccf172cf6e1d": {
+      "displayName": "CloudGuardianStack Template",
+      "source": {
+        "path": "CloudGuardianStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "135808934664-us-east-1-08dc66e9": {
+          "bucketName": "cdk-hnb659fds-assets-135808934664-us-east-1",
+          "objectKey": "25de300acef038deb512028a35112bc93b6f13cab3fef155bed5ccf172cf6e1d.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-file-publishing-role-135808934664-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
