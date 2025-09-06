@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-deploy-role-135808934664-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-cfn-exec-role-135808934664-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-135808934664-us-east-1/25de300acef038deb512028a35112bc93b6f13cab3fef155bed5ccf172cf6e1d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-135808934664-us-east-1/c5950848ef0fe495d346ca78b4c22015e0da2940e11dbfe2f7dd1fae5f8df8fa.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -66,6 +66,12 @@
             "data": "BackfillCoordinator9E054EF1"
           }
         ],
+        "/CloudGuardianStack/BackfillCoordinator/InvokeFcyXBRX02EWa52GlF+ECQiCzDt0fdRUDi4mo4foC5aU=": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BackfillCoordinatorInvokeFcyXBRX02EWa52GlFECQiCzDt0fdRUDi4mo4foC5aU148361A9"
+          }
+        ],
         "/CloudGuardianStack/LanguageFetcher/ServiceRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -82,6 +88,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "LanguageFetcher20DF511E"
+          }
+        ],
+        "/CloudGuardianStack/LanguageFetcher/InvokeFcyXBRX02EWa52GlF+ECQiCzDt0fdRUDi4mo4foC5aU=": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LanguageFetcherInvokeFcyXBRX02EWa52GlFECQiCzDt0fdRUDi4mo4foC5aU5D5B057A"
           }
         ],
         "/CloudGuardianStack/CloudGuardianApi/Resource": [
@@ -220,12 +232,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CloudGuardianApirepoownernamelanguagesGET24B4E438"
-          }
-        ],
-        "/CloudGuardianStack/LanguageTableName": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "LanguageTableName"
           }
         ],
         "/CloudGuardianStack/ApiGatewayUrl": [
