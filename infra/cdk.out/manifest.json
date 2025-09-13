@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-deploy-role-135808934664-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::135808934664:role/cdk-hnb659fds-cfn-exec-role-135808934664-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-135808934664-us-east-1/c5950848ef0fe495d346ca78b4c22015e0da2940e11dbfe2f7dd1fae5f8df8fa.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-135808934664-us-east-1/2502ee34546af1abfcd822fdeb8275911538d2d6061026911b279c5f44b8190a.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -96,6 +96,42 @@
             "data": "LanguageFetcherInvokeFcyXBRX02EWa52GlFECQiCzDt0fdRUDi4mo4foC5aU5D5B057A"
           }
         ],
+        "/CloudGuardianStack/LanguageSnapshotter/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LanguageSnapshotterServiceRoleD7CE052A"
+          }
+        ],
+        "/CloudGuardianStack/LanguageSnapshotter/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LanguageSnapshotterServiceRoleDefaultPolicy2D91A248"
+          }
+        ],
+        "/CloudGuardianStack/LanguageSnapshotter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LanguageSnapshotter161C95E1"
+          }
+        ],
+        "/CloudGuardianStack/WebhookRouter/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebhookRouterServiceRole94972D52"
+          }
+        ],
+        "/CloudGuardianStack/WebhookRouter/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebhookRouterServiceRoleDefaultPolicy49DC97D2"
+          }
+        ],
+        "/CloudGuardianStack/WebhookRouter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebhookRouter05ECC1AC"
+          }
+        ],
         "/CloudGuardianStack/CloudGuardianApi/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -117,7 +153,7 @@
         "/CloudGuardianStack/CloudGuardianApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "CloudGuardianApiDeployment87E142346fd07ae336e9434d8841c4499943745f"
+            "data": "CloudGuardianApiDeployment87E14234d820c5948262c8ed9b73f4f8ceeb50de"
           }
         ],
         "/CloudGuardianStack/CloudGuardianApi/DeploymentStage.prod/Resource": [
@@ -166,6 +202,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CloudGuardianApibackfillPOSTA870A606"
+          }
+        ],
+        "/CloudGuardianStack/CloudGuardianApi/Default/webhook/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudGuardianApiwebhook76FE3BE9"
+          }
+        ],
+        "/CloudGuardianStack/CloudGuardianApi/Default/webhook/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudGuardianApiwebhookOPTIONS8AF914FA"
+          }
+        ],
+        "/CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/ApiPermission.CloudGuardianStackCloudGuardianApi7FE0FA17.POST..webhook": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudGuardianApiwebhookPOSTApiPermissionCloudGuardianStackCloudGuardianApi7FE0FA17POSTwebhook17DB2A92"
+          }
+        ],
+        "/CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/ApiPermission.Test.CloudGuardianStackCloudGuardianApi7FE0FA17.POST..webhook": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudGuardianApiwebhookPOSTApiPermissionTestCloudGuardianStackCloudGuardianApi7FE0FA17POSTwebhook8ACA1DD4"
+          }
+        ],
+        "/CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudGuardianApiwebhookPOSTEC61FD76"
           }
         ],
         "/CloudGuardianStack/CloudGuardianApi/Default/repo/Resource": [
@@ -250,6 +316,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "LanguagesEndpointExample"
+          }
+        ],
+        "/CloudGuardianStack/WebhookEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WebhookEndpoint"
           }
         ],
         "/CloudGuardianStack/CDKMetadata/Default": [

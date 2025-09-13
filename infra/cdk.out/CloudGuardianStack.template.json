@@ -292,6 +292,226 @@
     "aws:cdk:path": "CloudGuardianStack/LanguageFetcher/InvokeFcyXBRX02EWa52GlF+ECQiCzDt0fdRUDi4mo4foC5aU="
    }
   },
+  "LanguageSnapshotterServiceRoleD7CE052A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/LanguageSnapshotter/ServiceRole/Resource"
+   }
+  },
+  "LanguageSnapshotterServiceRoleDefaultPolicy2D91A248": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "CloudGuardianLanguageSnapshots001546C7",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LanguageSnapshotterServiceRoleDefaultPolicy2D91A248",
+    "Roles": [
+     {
+      "Ref": "LanguageSnapshotterServiceRoleD7CE052A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/LanguageSnapshotter/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LanguageSnapshotter161C95E1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-135808934664-us-east-1",
+     "S3Key": "13a6e8ddfaed06bf99a2d7b1dd73bd4156db4354fe8a8ed79f135732cf038e16.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "LANGUAGE_TABLE_NAME": {
+       "Ref": "CloudGuardianLanguageSnapshots001546C7"
+      },
+      "GITHUB_TOKEN": ""
+     }
+    },
+    "FunctionName": "cloudguardian-language-snapshotter",
+    "Handler": "index.handler",
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "LanguageSnapshotterServiceRoleD7CE052A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "LanguageSnapshotterServiceRoleDefaultPolicy2D91A248",
+    "LanguageSnapshotterServiceRoleD7CE052A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/LanguageSnapshotter/Resource",
+    "aws:asset:path": "D:\\EcoDev",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WebhookRouterServiceRole94972D52": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/WebhookRouter/ServiceRole/Resource"
+   }
+  },
+  "WebhookRouterServiceRoleDefaultPolicy49DC97D2": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "LanguageSnapshotter161C95E1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "LanguageSnapshotter161C95E1",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WebhookRouterServiceRoleDefaultPolicy49DC97D2",
+    "Roles": [
+     {
+      "Ref": "WebhookRouterServiceRole94972D52"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/WebhookRouter/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WebhookRouter05ECC1AC": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-135808934664-us-east-1",
+     "S3Key": "281add9292eea4f506524ea4d290f8a79518334700a43b03f9be9bf36f92e725.zip"
+    },
+    "FunctionName": "cloudguardian-webhook-router",
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WebhookRouterServiceRole94972D52",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "WebhookRouterServiceRoleDefaultPolicy49DC97D2",
+    "WebhookRouterServiceRole94972D52"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/WebhookRouter/Resource",
+    "aws:asset:path": "D:\\EcoDev",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
   "CloudGuardianApiF972561C": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
@@ -357,7 +577,7 @@
     "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Account"
    }
   },
-  "CloudGuardianApiDeployment87E142346fd07ae336e9434d8841c4499943745f": {
+  "CloudGuardianApiDeployment87E14234d820c5948262c8ed9b73f4f8ceeb50de": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "API for CloudGuardian language tracking",
@@ -378,7 +598,10 @@
     "CloudGuardianApirepoownerOPTIONS1D4D99F0",
     "CloudGuardianApirepoownerD2744236",
     "CloudGuardianApirepoOPTIONS698D32FD",
-    "CloudGuardianApirepo0F6876A3"
+    "CloudGuardianApirepo0F6876A3",
+    "CloudGuardianApiwebhookOPTIONS8AF914FA",
+    "CloudGuardianApiwebhookPOSTEC61FD76",
+    "CloudGuardianApiwebhook76FE3BE9"
    ],
    "Metadata": {
     "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Deployment/Resource",
@@ -389,7 +612,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "CloudGuardianApiDeployment87E142346fd07ae336e9434d8841c4499943745f"
+     "Ref": "CloudGuardianApiDeployment87E14234d820c5948262c8ed9b73f4f8ceeb50de"
     },
     "RestApiId": {
      "Ref": "CloudGuardianApiF972561C"
@@ -615,6 +838,174 @@
    },
    "Metadata": {
     "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/backfill/POST/Resource"
+   }
+  },
+  "CloudGuardianApiwebhook76FE3BE9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "CloudGuardianApiF972561C",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "webhook",
+    "RestApiId": {
+     "Ref": "CloudGuardianApiF972561C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/webhook/Resource"
+   }
+  },
+  "CloudGuardianApiwebhookOPTIONS8AF914FA": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+       },
+       "StatusCode": "204"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{ statusCode: 200 }"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Methods": true
+      },
+      "StatusCode": "204"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "CloudGuardianApiwebhook76FE3BE9"
+    },
+    "RestApiId": {
+     "Ref": "CloudGuardianApiF972561C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/webhook/OPTIONS/Resource"
+   }
+  },
+  "CloudGuardianApiwebhookPOSTApiPermissionCloudGuardianStackCloudGuardianApi7FE0FA17POSTwebhook17DB2A92": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WebhookRouter05ECC1AC",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-east-1:135808934664:",
+       {
+        "Ref": "CloudGuardianApiF972561C"
+       },
+       "/",
+       {
+        "Ref": "CloudGuardianApiDeploymentStageprod4DA17B3E"
+       },
+       "/POST/webhook"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/ApiPermission.CloudGuardianStackCloudGuardianApi7FE0FA17.POST..webhook"
+   }
+  },
+  "CloudGuardianApiwebhookPOSTApiPermissionTestCloudGuardianStackCloudGuardianApi7FE0FA17POSTwebhook8ACA1DD4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "WebhookRouter05ECC1AC",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-east-1:135808934664:",
+       {
+        "Ref": "CloudGuardianApiF972561C"
+       },
+       "/test-invoke-stage/POST/webhook"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/ApiPermission.Test.CloudGuardianStackCloudGuardianApi7FE0FA17.POST..webhook"
+   }
+  },
+  "CloudGuardianApiwebhookPOSTEC61FD76": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "WebhookRouter05ECC1AC",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "CloudGuardianApiwebhook76FE3BE9"
+    },
+    "RestApiId": {
+     "Ref": "CloudGuardianApiF972561C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CloudGuardianStack/CloudGuardianApi/Default/webhook/POST/Resource"
    }
   },
   "CloudGuardianApirepo0F6876A3": {
@@ -1054,6 +1445,29 @@
        "Ref": "CloudGuardianApiDeploymentStageprod4DA17B3E"
       },
       "/repo/octocat/hello-world/languages"
+     ]
+    ]
+   }
+  },
+  "WebhookEndpoint": {
+   "Description": "URL to configure in GitHub webhook settings",
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "CloudGuardianApiF972561C"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "CloudGuardianApiDeploymentStageprod4DA17B3E"
+      },
+      "/webhook"
      ]
     ]
    }
