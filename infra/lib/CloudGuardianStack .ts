@@ -4,12 +4,8 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as nodejsLambda from "aws-cdk-lib/aws-lambda-nodejs";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
-import * as iam from "aws-cdk-lib/aws-iam"; //
+import * as iam from "aws-cdk-lib/aws-iam";
 
-const env = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.AWS_REGION || "us-east-1",
-};
 export class CloudGuardianStack extends cdk.Stack {
   public readonly languageTable: dynamodb.Table;
 
@@ -53,15 +49,38 @@ export class CloudGuardianStack extends cdk.Stack {
       },
     });
 
+    const languageSnapshotter = new nodejsLambda.NodejsFunction(this, 'LanguageSnapshotter', {
+          functionName: 'cloudguardian-language-snapshotter',
+          runtime: lambda.Runtime.NODEJS_18_X,
+          entry: '../lambda/language-snapshotter/index.ts',
+          handler: 'handler',
+          timeout: cdk.Duration.seconds(30),
+          memorySize: 256,
+      environment: {
+        LANGUAGE_TABLE_NAME: this.languageTable.tableName,
+        GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+      },
+    });
+
+    const webhookRouter = new nodejsLambda.NodejsFunction(this, 'WebhookRouter', {
+      functionName: 'cloudguardian-webhook-router',
+      runtime: lambda.Runtime.NODEJS_18_X,
+      entry: '../lambda/webhook-router/index.ts',
+      handler: 'handler',
+      timeout: cdk.Duration.seconds(10),
+  });
+
     // 3. Grant Lambda permissions
     this.languageTable.grantWriteData(backfillCoordinator);
     this.languageTable.grantReadData(languageFetcher);
+    this.languageTable.grantWriteData(languageSnapshotter);
+    languageSnapshotter.grantInvoke(webhookRouter);
 
-    // 3.5 CRITICAL: Grant API Gateway permission to invoke Lambda functions
+    // 4. CRITICAL: Grant API Gateway permission to invoke Lambda functions
     backfillCoordinator.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));
-    languageFetcher.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));
+    languageFetcher.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com')); // ← THIS WAS MISSING!
 
-    // 4. Create API Gateway
+    // 5. Create API Gateway
     const api = new apigateway.RestApi(this, "CloudGuardianApi", {
       restApiName: "CloudGuardian Service",
       description: "API for CloudGuardian language tracking",
@@ -71,9 +90,12 @@ export class CloudGuardianStack extends cdk.Stack {
       },
     });
 
-    // 5. Add API endpoints
+    // 6. Add API endpoints
     const backfillResource = api.root.addResource("backfill");
     backfillResource.addMethod("POST", new apigateway.LambdaIntegration(backfillCoordinator));
+
+    const webhookResource = api.root.addResource('webhook');
+    webhookResource.addMethod('POST', new apigateway.LambdaIntegration(webhookRouter));
 
     const repoResource = api.root.addResource("repo");
     const ownerResource = repoResource.addResource("{owner}");
@@ -81,7 +103,7 @@ export class CloudGuardianStack extends cdk.Stack {
     const languagesResource = nameResource.addResource("languages");
     languagesResource.addMethod("GET", new apigateway.LambdaIntegration(languageFetcher));
 
-    // 6. Outputs
+    // 7. Outputs
     new cdk.CfnOutput(this, "ApiGatewayUrl", {
       value: api.url,
     });
@@ -90,6 +112,10 @@ export class CloudGuardianStack extends cdk.Stack {
     });
     new cdk.CfnOutput(this, "LanguagesEndpointExample", {
       value: `${api.url}repo/octocat/hello-world/languages`,
+    });
+    new cdk.CfnOutput(this, 'WebhookEndpoint', {
+    value: `${api.url}webhook`,
+    description: 'URL to configure in GitHub webhook settings',
     });
   }
 }
