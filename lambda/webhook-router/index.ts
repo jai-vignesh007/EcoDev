@@ -50,6 +50,10 @@ export const handler = async (event: any) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: 'Pong! Webhook is working' })
         };
+      case 'workflow_run':
+        targetLambda = 'cloudguardian-workflow-run-processor';
+        console.log('✅ [DEBUG] Routing to Workflow Run Processor');
+        break;
       
       default:
         console.log(`🔍 [DEBUG] No handler for event type: ${githubEventType}`);
